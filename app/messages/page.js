@@ -63,6 +63,9 @@ export default function MessagesPage() {
             <Link href="/chat" className="text-muted hover:text-paper">
               Общий чат
             </Link>
+            <Link href="/forum" className="text-muted hover:text-paper">
+              Форум
+            </Link>
             <Link href="/profile" className="text-muted hover:text-paper">
               Профиль
             </Link>
