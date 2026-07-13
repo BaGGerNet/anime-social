@@ -14,6 +14,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
+  const [avatars, setAvatars] = useState({});
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -36,6 +37,18 @@ export default function ChatPage() {
         .single();
 
       setUsername(profile?.username || "Аноним");
+
+      // Загружаем аватары всех пользователей одним запросом,
+      // чтобы показывать их рядом с сообщениями
+      const { data: allProfiles } = await supabase
+        .from("profiles")
+        .select("id, avatar_url");
+
+      const avatarMap = {};
+      (allProfiles || []).forEach((p) => {
+        avatarMap[p.id] = p.avatar_url;
+      });
+      setAvatars(avatarMap);
 
       // Загружаем последние 50 сообщений
       const { data: initialMessages } = await supabase
@@ -121,18 +134,35 @@ export default function ChatPage() {
           {messages.map((m) => (
             <div
               key={m.id}
-              className={`speech-bubble max-w-md px-4 py-2 ${
-                m.user_id === userId
-                  ? "self-end bg-sakura text-ink"
-                  : "self-start bg-panel text-paper"
+              className={`flex items-end gap-2 ${
+                m.user_id === userId ? "flex-row-reverse self-end" : "self-start"
               }`}
             >
-              {m.user_id !== userId && (
-                <p className="mb-1 text-xs font-semibold text-denki">
-                  {m.username}
-                </p>
-              )}
-              <p className="text-sm">{m.content}</p>
+              <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
+                {avatars[m.user_id] ? (
+                  <img
+                    src={avatars[m.user_id]}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  m.username[0]?.toUpperCase()
+                )}
+              </div>
+              <div
+                className={`speech-bubble max-w-md px-4 py-2 ${
+                  m.user_id === userId
+                    ? "bg-sakura text-ink"
+                    : "bg-panel text-paper"
+                }`}
+              >
+                {m.user_id !== userId && (
+                  <p className="mb-1 text-xs font-semibold text-denki">
+                    {m.username}
+                  </p>
+                )}
+                <p className="text-sm">{m.content}</p>
+              </div>
             </div>
           ))}
           <div ref={bottomRef} />
