@@ -98,6 +98,9 @@ export default function ProfilePage() {
             <Link href="/messages" className="text-muted hover:text-paper">
               Сообщения
             </Link>
+            <Link href="/forum" className="text-muted hover:text-paper">
+              Форум
+            </Link>
             <button
               onClick={handleLogout}
               className="text-muted hover:text-paper"
