@@ -18,6 +18,7 @@ export default function TopicPage() {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
+  const [avatars, setAvatars] = useState({});
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -40,6 +41,16 @@ export default function TopicPage() {
         .single();
 
       setUsername(profile?.username || "Аноним");
+
+      const { data: allProfiles } = await supabase
+        .from("profiles")
+        .select("id, avatar_url");
+
+      const avatarMap = {};
+      (allProfiles || []).forEach((pr) => {
+        avatarMap[pr.id] = pr.avatar_url;
+      });
+      setAvatars(avatarMap);
 
       const { data: topicData } = await supabase
         .from("forum_topics")
@@ -139,12 +150,25 @@ export default function TopicPage() {
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="mx-auto flex max-w-2xl flex-col gap-4">
           {posts.map((p) => (
-            <div key={p.id} className="rounded-lg bg-panel px-4 py-3">
-              <p className="text-xs font-semibold text-denki">{p.username}</p>
-              <p className="mt-1 text-sm text-paper">{p.content}</p>
-              <p className="mt-2 text-xs text-muted">
-                {new Date(p.created_at).toLocaleString("ru-RU")}
-              </p>
+            <div key={p.id} className="flex gap-3 rounded-lg bg-panel px-4 py-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full bg-ink text-xs font-semibold text-sakura">
+                {avatars[p.user_id] ? (
+                  <img
+                    src={avatars[p.user_id]}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  p.username[0]?.toUpperCase()
+                )}
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-denki">{p.username}</p>
+                <p className="mt-1 text-sm text-paper">{p.content}</p>
+                <p className="mt-2 text-xs text-muted">
+                  {new Date(p.created_at).toLocaleString("ru-RU")}
+                </p>
+              </div>
             </div>
           ))}
           <div ref={bottomRef} />
