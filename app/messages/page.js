@@ -30,7 +30,7 @@ export default function MessagesPage() {
       // Все профили, кроме своего собственного
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("id, username, favorite_genres")
+        .select("id, username, favorite_genres, avatar_url")
         .neq("id", user.id);
 
       setPeople(profiles || []);
@@ -98,8 +98,16 @@ export default function MessagesPage() {
               href={`/messages/${p.id}`}
               className="flex items-center gap-3 rounded-lg bg-panel px-4 py-3 transition hover:bg-panel/70"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink font-display text-lg text-sakura">
-                {(p.username || "?")[0].toUpperCase()}
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-ink font-display text-lg text-sakura">
+                {p.avatar_url ? (
+                  <img
+                    src={p.avatar_url}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  (p.username || "?")[0].toUpperCase()
+                )}
               </div>
               <div>
                 <p className="font-medium text-paper">
