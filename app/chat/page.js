@@ -107,6 +107,9 @@ export default function ChatPage() {
           <Link href="/messages" className="text-muted hover:text-paper">
             Личные сообщения
           </Link>
+          <Link href="/forum" className="text-muted hover:text-paper">
+            Форум
+          </Link>
           <Link href="/profile" className="text-muted hover:text-paper">
             Профиль
           </Link>
