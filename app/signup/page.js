@@ -1,52 +1,39 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { supabase } from "../../lib/supabaseClient";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { supabase } from '../../lib/supabaseClient';
 
 export default function SignupPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   async function handleSignup(e) {
     e.preventDefault();
-    setError("");
+    setError('');
     setLoading(true);
 
-    // 1. Создаём пользователя в системе авторизации Supabase
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: { username },
+      },
     });
+
+    setLoading(false);
 
     if (signUpError) {
       setError(signUpError.message);
-      setLoading(false);
       return;
     }
 
-    // 2. Создаём строку в таблице profiles с никнеймом
-    const userId = data.user?.id;
-    if (userId) {
-      const { error: profileError } = await supabase.from("profiles").insert({
-        id: userId,
-        username,
-      });
-
-      if (profileError) {
-        setError(profileError.message);
-        setLoading(false);
-        return;
-      }
-    }
-
-    setLoading(false);
-    router.push("/profile");
+    router.push('/profile');
   }
 
   return (
@@ -111,12 +98,12 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full rounded-full bg-sakura py-3 font-semibold text-ink transition hover:brightness-110 disabled:opacity-50"
           >
-            {loading ? "Создаём..." : "Зарегистрироваться"}
+            {loading ? 'Создаём...' : 'Зарегистрироваться'}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-muted">
-          Уже есть аккаунт?{" "}
+          Уже есть аккаунт?{' '}
           <Link href="/login" className="text-denki hover:underline">
             Войти
           </Link>
