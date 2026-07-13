@@ -14,6 +14,7 @@ export default function ConversationPage() {
 
   const [userId, setUserId] = useState(null);
   const [otherUsername, setOtherUsername] = useState("");
+  const [otherAvatar, setOtherAvatar] = useState("");
   const [conversationId, setConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
   const [content, setContent] = useState("");
@@ -35,11 +36,12 @@ export default function ConversationPage() {
 
       const { data: otherProfile } = await supabase
         .from("profiles")
-        .select("username")
+        .select("username, avatar_url")
         .eq("id", otherUserId)
         .single();
 
       setOtherUsername(otherProfile?.username || "Пользователь");
+      setOtherAvatar(otherProfile?.avatar_url || "");
 
       // Нормализуем порядок пары id, чтобы не плодить дубликаты переписки
       const [userOne, userTwo] = [user.id, otherUserId].sort();
@@ -142,7 +144,16 @@ export default function ConversationPage() {
         <Link href="/messages" className="text-sm text-muted hover:text-paper">
           ← Назад к списку
         </Link>
-        <p className="font-medium text-paper">{otherUsername}</p>
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
+            {otherAvatar ? (
+              <img src={otherAvatar} alt="" className="h-full w-full object-cover" />
+            ) : (
+              otherUsername[0]?.toUpperCase()
+            )}
+          </div>
+          <p className="font-medium text-paper">{otherUsername}</p>
+        </div>
       </header>
 
       <div className="flex-1 overflow-y-auto px-6 py-6">
@@ -156,13 +167,34 @@ export default function ConversationPage() {
           {messages.map((m) => (
             <div
               key={m.id}
-              className={`speech-bubble max-w-md px-4 py-2 ${
+              className={`flex items-end gap-2 ${
                 m.sender_id === userId
-                  ? "self-end bg-sakura text-ink"
-                  : "self-start bg-panel text-paper"
+                  ? "flex-row-reverse self-end"
+                  : "self-start"
               }`}
             >
-              <p className="text-sm">{m.content}</p>
+              {m.sender_id !== userId && (
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
+                  {otherAvatar ? (
+                    <img
+                      src={otherAvatar}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    otherUsername[0]?.toUpperCase()
+                  )}
+                </div>
+              )}
+              <div
+                className={`speech-bubble max-w-md px-4 py-2 ${
+                  m.sender_id === userId
+                    ? "bg-sakura text-ink"
+                    : "bg-panel text-paper"
+                }`}
+              >
+                <p className="text-sm">{m.content}</p>
+              </div>
             </div>
           ))}
           <div ref={bottomRef} />
