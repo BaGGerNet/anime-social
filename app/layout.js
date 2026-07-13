@@ -1,4 +1,5 @@
 import "./globals.css";
+import NotificationToasts from "../components/NotificationToasts";
 
 export const metadata = {
   title: "Circle — сообщество анимешников",
@@ -8,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ru">
-      <body className="font-body min-h-screen">{children}</body>
+      <body className="font-body min-h-screen">
+        {children}
+        <NotificationToasts />
+      </body>
     </html>
   );
 }
