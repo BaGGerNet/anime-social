@@ -53,7 +53,7 @@ export default function ForumPage() {
       <div className="mx-auto max-w-2xl">
         <header className="flex items-center justify-between">
           <Link href="/profile" className="font-display text-2xl text-sakura">
-            CIRCLE
+            RES_SCALES
           </Link>
           <div className="flex gap-4 text-sm">
             <Link href="/chat" className="text-muted hover:text-paper">
