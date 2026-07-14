@@ -2,7 +2,7 @@ import "./globals.css";
 import NotificationToasts from "../components/NotificationToasts";
 
 export const metadata = {
-  title: "Circle — сообщество анимешников",
+  title: "RES_SCALES — сообщество анимешников",
   description: "Место, где аниме-фанаты находят своих людей",
 };
 
