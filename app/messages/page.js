@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
+import Header from "../../components/Header";
 
 export default function MessagesPage() {
   const router = useRouter();
@@ -53,24 +54,9 @@ export default function MessagesPage() {
   }
 
   return (
-    <main className="min-h-screen bg-ink px-6 py-8">
-      <div className="mx-auto max-w-xl">
-        <header className="flex items-center justify-between">
-          <Link href="/profile" className="font-display text-2xl text-sakura">
-            RES_SCALES
-          </Link>
-          <div className="flex gap-4 text-sm">
-            <Link href="/chat" className="text-muted hover:text-paper">
-              Общий чат
-            </Link>
-            <Link href="/forum" className="text-muted hover:text-paper">
-              Форум
-            </Link>
-            <Link href="/profile" className="text-muted hover:text-paper">
-              Профиль
-            </Link>
-          </div>
-        </header>
+    <main className="min-h-screen bg-ink">
+      <Header />
+      <div className="mx-auto max-w-xl px-6 py-8">
 
         <h1 className="mt-8 text-xl font-semibold text-paper">
           Личные сообщения
