@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
+import Header from "../../components/Header";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -60,6 +61,7 @@ export default function ProfilePage() {
     setUploading(true);
     setMessage("");
 
+    // Простая проверка размера — не больше 5 МБ
     if (file.size > 5 * 1024 * 1024) {
       setMessage("Файл слишком большой (максимум 5 МБ)");
       setUploading(false);
@@ -79,10 +81,12 @@ export default function ProfilePage() {
       return;
     }
 
+    // Получаем публичную ссылку на загруженный файл
     const {
       data: { publicUrl },
     } = supabase.storage.from("avatars").getPublicUrl(filePath);
 
+    // Добавляем метку времени, чтобы обойти кэширование браузера
     const freshUrl = `${publicUrl}?t=${Date.now()}`;
 
     const { error: updateError } = await supabase
@@ -124,11 +128,6 @@ export default function ProfilePage() {
     }
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
-
   if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-ink">
@@ -138,31 +137,9 @@ export default function ProfilePage() {
   }
 
   return (
-    <main className="min-h-screen bg-ink px-6 py-12">
-      <div className="mx-auto max-w-xl">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="font-display text-3xl text-sakura">
-            RES_SCALES
-          </Link>
-          <div className="flex items-center gap-4 text-sm">
-            <Link href="/chat" className="text-muted hover:text-paper">
-              Общий чат
-            </Link>
-            <Link href="/messages" className="text-muted hover:text-paper">
-              Сообщения
-            </Link>
-            <Link href="/forum" className="text-muted hover:text-paper">
-              Форум
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="text-muted hover:text-paper"
-            >
-              Выйти
-            </button>
-          </div>
-        </div>
-
+    <main className="min-h-screen bg-ink">
+      <Header />
+      <div className="mx-auto max-w-xl px-6 py-12">
         <div className="mt-8 flex items-center gap-4">
           <label className="group relative cursor-pointer">
             <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-panel font-display text-2xl text-sakura">
