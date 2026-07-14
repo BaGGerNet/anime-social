@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
+import Header from "../../components/Header";
 
 export default function ChatPage() {
   const router = useRouter();
@@ -111,23 +112,7 @@ export default function ChatPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-ink">
-      <header className="flex items-center justify-between border-b border-paper/10 px-6 py-4">
-        <Link href="/profile" className="font-display text-2xl text-sakura">
-          RES_SCALES
-        </Link>
-        <div className="flex gap-4 text-sm">
-          <span className="text-paper">Общий чат</span>
-          <Link href="/messages" className="text-muted hover:text-paper">
-            Личные сообщения
-          </Link>
-          <Link href="/forum" className="text-muted hover:text-paper">
-            Форум
-          </Link>
-          <Link href="/profile" className="text-muted hover:text-paper">
-            Профиль
-          </Link>
-        </div>
-      </header>
+      <Header />
 
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="mx-auto flex max-w-2xl flex-col gap-3">
