@@ -113,7 +113,7 @@ export default function ChatPage() {
     <main className="flex min-h-screen flex-col bg-ink">
       <header className="flex items-center justify-between border-b border-paper/10 px-6 py-4">
         <Link href="/profile" className="font-display text-2xl text-sakura">
-          CIRCLE
+          RES_SCALES
         </Link>
         <div className="flex gap-4 text-sm">
           <span className="text-paper">Общий чат</span>
