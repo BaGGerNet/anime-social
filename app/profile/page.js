@@ -142,7 +142,7 @@ export default function ProfilePage() {
       <div className="mx-auto max-w-xl">
         <div className="flex items-center justify-between">
           <Link href="/" className="font-display text-3xl text-sakura">
-            CIRCLE
+            RES_SCALES
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <Link href="/chat" className="text-muted hover:text-paper">
