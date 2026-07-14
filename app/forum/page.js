@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
+import Header from "../../components/Header";
 
 export default function ForumPage() {
   const router = useRouter();
@@ -49,24 +50,9 @@ export default function ForumPage() {
   }
 
   return (
-    <main className="min-h-screen bg-ink px-6 py-8">
-      <div className="mx-auto max-w-2xl">
-        <header className="flex items-center justify-between">
-          <Link href="/profile" className="font-display text-2xl text-sakura">
-            RES_SCALES
-          </Link>
-          <div className="flex gap-4 text-sm">
-            <Link href="/chat" className="text-muted hover:text-paper">
-              Общий чат
-            </Link>
-            <Link href="/messages" className="text-muted hover:text-paper">
-              Сообщения
-            </Link>
-            <Link href="/profile" className="text-muted hover:text-paper">
-              Профиль
-            </Link>
-          </div>
-        </header>
+    <main className="min-h-screen bg-ink">
+      <Header />
+      <div className="mx-auto max-w-2xl px-6 py-8">
 
         <div className="mt-8 flex items-center justify-between">
           <h1 className="text-xl font-semibold text-paper">Форум по тайтлам</h1>
