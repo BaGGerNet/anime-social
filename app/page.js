@@ -23,16 +23,16 @@ export default function Home() {
           насмотрелся на сезон вперёд.
         </p>
 
-        <div className="mt-10 flex gap-4">
+        <div className="mt-10 flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
           <Link
             href="/signup"
-            className="rounded-full bg-sakura px-8 py-3 font-semibold text-ink transition hover:brightness-110"
+            className="rounded-full bg-sakura px-8 py-3 text-center font-semibold text-ink transition hover:brightness-110"
           >
             Присоединиться
           </Link>
           <Link
             href="/login"
-            className="rounded-full border border-paper/30 px-8 py-3 font-semibold text-paper transition hover:border-paper"
+            className="whitespace-nowrap rounded-full border border-paper/30 px-8 py-3 text-center font-semibold text-paper transition hover:border-paper"
           >
             У меня уже есть аккаунт
           </Link>
