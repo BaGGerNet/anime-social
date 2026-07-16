@@ -38,7 +38,7 @@ export default function Header({ backHref, backLabel }) {
   return (
     <header className="flex flex-wrap items-center justify-between gap-3 border-b border-paper/10 px-6 py-4">
       <Link href="/profile" className="font-display text-2xl text-sakura">
-        RES_SCALES
+        ANIWaku
       </Link>
 
       <nav className="flex flex-wrap items-center gap-4 text-sm">
