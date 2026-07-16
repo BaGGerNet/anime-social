@@ -38,13 +38,15 @@ export default function Header({ backHref, backLabel }) {
   }
 
   return (
-    <header className="flex flex-wrap items-center justify-between gap-3 border-b border-paper/10 px-6 py-4">
-      <Link href="/profile" className="flex items-center gap-2">
-        <LogoMark size={36} />
-        <span className="font-display text-2xl text-sakura">ANIWaku</span>
+    <header className="flex flex-col gap-3 border-b border-paper/10 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-4">
+      <Link href="/profile" className="flex shrink-0 items-center gap-2">
+        <LogoMark size={32} />
+        <span className="font-display text-xl text-sakura sm:text-2xl">
+          ANIWaku
+        </span>
       </Link>
 
-      <nav className="flex flex-wrap items-center gap-4 text-sm">
+      <nav className="flex items-center gap-4 overflow-x-auto whitespace-nowrap text-sm [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -53,8 +55,8 @@ export default function Header({ backHref, backLabel }) {
               href={item.href}
               className={
                 isActive
-                  ? "font-medium text-sakura"
-                  : "text-muted transition hover:text-paper"
+                  ? "shrink-0 font-medium text-sakura"
+                  : "shrink-0 text-muted transition hover:text-paper"
               }
             >
               {item.label}
@@ -63,7 +65,7 @@ export default function Header({ backHref, backLabel }) {
         })}
         <button
           onClick={handleLogout}
-          className="text-muted transition hover:text-paper"
+          className="ml-auto shrink-0 border-l border-paper/10 pl-4 text-muted transition hover:text-paper"
         >
           Выйти
         </button>
