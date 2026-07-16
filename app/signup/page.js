@@ -45,7 +45,7 @@ export default function SignupPage() {
     <main className="flex min-h-screen items-center justify-center bg-ink px-6">
       <div className="w-full max-w-md">
         <Link href="/" className="font-display text-3xl text-sakura">
-          RES_SCALES
+          ANIWaku
         </Link>
         <h1 className="mt-6 text-2xl font-semibold text-paper">
           Создать аккаунт
