@@ -1,4 +1,5 @@
 import Link from "next/link";
+import LogoMark from "../components/LogoMark";
 
 export default function Home() {
   return (
@@ -6,7 +7,9 @@ export default function Home() {
       <div className="halftone-bg absolute inset-0 opacity-60" />
 
       <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 py-24 text-center">
-        <span className="mb-4 rounded-full border border-sakura/40 px-4 py-1 text-sm tracking-wide text-sakura">
+        <LogoMark size={72} />
+
+        <span className="mb-4 mt-6 rounded-full border border-sakura/40 px-4 py-1 text-sm tracking-wide text-sakura">
           сезон открыт · заходи
         </span>
 
