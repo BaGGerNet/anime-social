@@ -1,0 +1,26 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip">
+      <circle cx="100" cy="100" r="92" />
+    </clipPath>
+    <pattern id="dots" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.6" fill="#FF5C8A" opacity="0.25" />
+    </pattern>
+  </defs>
+  <circle cx="100" cy="100" r="96" fill="#0E0E13" />
+  <circle cx="100" cy="100" r="92" fill="#17171F" stroke="#FF5C8A" stroke-width="3" />
+  <g clip-path="url(#clip)">
+    <rect x="8" y="8" width="184" height="184" fill="url(#dots)" />
+  </g>
+  <path d="M 62 148 L 62 168 L 84 148 Z" fill="#4D7CFF" />
+  <text
+    x="100"
+    y="128"
+    text-anchor="middle"
+    font-family="'Arial Black', 'Helvetica Neue', Arial, sans-serif"
+    font-weight="900"
+    font-size="100"
+    fill="#F4F1E9"
+  >A</text>
+  <circle cx="146" cy="62" r="9" fill="#FF5C8A" />
+</svg>
