@@ -2,7 +2,7 @@ import "./globals.css";
 import NotificationToasts from "../components/NotificationToasts";
 
 export const metadata = {
-  title: "res_scales — сообщество анимешников",
+  title: "ANIWaku — сообщество анимешников",
   description: "Место, где аниме-фанаты находят своих людей",
 };
 
