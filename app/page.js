@@ -11,7 +11,7 @@ export default function Home() {
         </span>
 
         <h1 className="font-display text-6xl leading-none tracking-wide text-paper sm:text-8xl">
-          RES_SCALES
+          ANIWaku
         </h1>
         <p className="mt-2 font-display text-2xl tracking-widest text-sakura sm:text-3xl">
           твой круг общения
