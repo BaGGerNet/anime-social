@@ -29,7 +29,7 @@ export default function Header({ backHref, backLabel }) {
           ← {backLabel || "Назад"}
         </Link>
         <Link href="/profile" className="font-display text-xl text-sakura">
-          RES_SCALES
+          ANIWaku
         </Link>
       </header>
     );
