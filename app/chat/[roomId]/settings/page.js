@@ -22,6 +22,8 @@ export default function RoomSettingsPage() {
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [message, setMessage] = useState("");
+  const [members, setMembers] = useState([]);
+  const [leaving, setLeaving] = useState(false);
 
   const isOwner = room && userId && room.created_by === userId;
 
@@ -48,6 +50,36 @@ export default function RoomSettingsPage() {
       setName(data?.name || "");
       setDescription(data?.description || "");
       setAvatarUrl(data?.avatar_url || "");
+
+      // Загружаем участников комнаты вместе с их профилями
+      const { data: memberRows } = await supabase
+        .from("room_members")
+        .select("user_id, joined_at")
+        .eq("room_id", roomId)
+        .order("joined_at", { ascending: true });
+
+      const memberIds = (memberRows || []).map((m) => m.user_id);
+
+      let profilesMap = {};
+      if (memberIds.length > 0) {
+        const { data: profilesData } = await supabase
+          .from("profiles")
+          .select("id, username, avatar_url")
+          .in("id", memberIds);
+
+        (profilesData || []).forEach((p) => {
+          profilesMap[p.id] = p;
+        });
+      }
+
+      setMembers(
+        (memberRows || []).map((m) => ({
+          userId: m.user_id,
+          username: profilesMap[m.user_id]?.username || "Аноним",
+          avatarUrl: profilesMap[m.user_id]?.avatar_url || "",
+        }))
+      );
+
       setLoading(false);
     }
 
@@ -121,6 +153,28 @@ export default function RoomSettingsPage() {
     } else {
       setMessage("Сохранено ✓");
     }
+  }
+
+  async function handleLeave() {
+    const confirmed = window.confirm(`Покинуть комнату «${room.name}»?`);
+    if (!confirmed) return;
+
+    setLeaving(true);
+
+    const { error } = await supabase
+      .from("room_members")
+      .delete()
+      .eq("room_id", roomId)
+      .eq("user_id", userId);
+
+    setLeaving(false);
+
+    if (error) {
+      setMessage("Ошибка: " + error.message);
+      return;
+    }
+
+    router.push("/chat");
   }
 
   async function handleDelete() {
@@ -252,6 +306,47 @@ export default function RoomSettingsPage() {
               {room.description || "Без описания"}
             </p>
             {message && <p className="text-sm text-denki">{message}</p>}
+          </div>
+        )}
+
+        <div className="mt-8 border-t border-paper/10 pt-6">
+          <p className="text-sm text-muted">
+            Участники · {members.length}
+          </p>
+          <div className="mt-3 flex flex-col gap-2">
+            {members.map((m) => (
+              <div key={m.userId} className="flex items-center gap-3">
+                <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
+                  {m.avatarUrl ? (
+                    <img
+                      src={m.avatarUrl}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    m.username[0]?.toUpperCase()
+                  )}
+                </div>
+                <p className="text-sm text-paper">
+                  {m.username}
+                  {m.userId === room.created_by && (
+                    <span className="ml-2 text-xs text-denki">создатель</span>
+                  )}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {!isOwner && (
+          <div className="mt-6">
+            <button
+              onClick={handleLeave}
+              disabled={leaving}
+              className="w-full rounded-full border border-paper/20 px-4 py-3 text-sm font-semibold text-paper transition hover:border-sakura disabled:opacity-50"
+            >
+              {leaving ? "..." : "Покинуть комнату"}
+            </button>
           </div>
         )}
 
