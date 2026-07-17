@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "../../../../lib/supabaseClient";
 import Header from "../../../../components/Header";
 
@@ -315,7 +316,11 @@ export default function RoomSettingsPage() {
           </p>
           <div className="mt-3 flex flex-col gap-2">
             {members.map((m) => (
-              <div key={m.userId} className="flex items-center gap-3">
+              <Link
+                key={m.userId}
+                href={`/profile/${m.userId}`}
+                className="flex items-center gap-3 transition hover:opacity-80"
+              >
                 <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
                   {m.avatarUrl ? (
                     <img
@@ -333,7 +338,7 @@ export default function RoomSettingsPage() {
                     <span className="ml-2 text-xs text-denki">создатель</span>
                   )}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
