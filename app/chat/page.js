@@ -5,8 +5,8 @@ export const dynamic = "force-dynamic";
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { supabase } from "../../lib/supabaseClient";
-import Header from "../../components/Header";
+import { supabase } from "../../../lib/supabaseClient";
+import Header from "../../../components/Header";
 
 export default function RoomsPage() {
   const router = useRouter();
