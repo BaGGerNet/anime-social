@@ -89,3 +89,14 @@ export default function RoomsPage() {
               <h2 className="font-medium text-paper">{r.name}</h2>
               {r.description && (
                 <p className="mt-1 text-sm text-muted">{r.description}</p>
+              )}
+              <p className="mt-2 text-xs text-muted">
+                создана {new Date(r.created_at).toLocaleDateString("ru-RU")}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
