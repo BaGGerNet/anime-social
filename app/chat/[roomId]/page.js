@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "../../../lib/supabaseClient";
 import Header from "../../../components/Header";
 
@@ -136,12 +137,28 @@ export default function RoomPage() {
     <main className="flex min-h-screen flex-col bg-ink">
       <Header backHref="/chat" backLabel="К списку комнат" />
 
-      <div className="border-b border-paper/10 px-6 py-3">
-        <h1 className="font-medium text-paper">{room.name}</h1>
-        {room.description && (
-          <p className="text-xs text-muted">{room.description}</p>
-        )}
-      </div>
+      <Link
+        href={`/chat/${roomId}/settings`}
+        className="flex items-center gap-3 border-b border-paper/10 px-6 py-3 transition hover:bg-panel/40"
+      >
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-panel text-sm font-semibold text-sakura">
+          {room.avatar_url ? (
+            <img
+              src={room.avatar_url}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            room.name[0]?.toUpperCase()
+          )}
+        </div>
+        <div>
+          <h1 className="font-medium text-paper">{room.name}</h1>
+          {room.description && (
+            <p className="text-xs text-muted">{room.description}</p>
+          )}
+        </div>
+      </Link>
 
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="mx-auto flex max-w-2xl flex-col gap-3">
