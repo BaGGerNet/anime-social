@@ -8,7 +8,7 @@ import Link from "next/link";
 import { supabase } from "../../lib/supabaseClient";
 import Header from "../../components/Header";
 
-export default function RoomPage() {
+export default function RoomsPage() {
   const router = useRouter();
   const params = useParams();
   const roomId = params.roomId;
