@@ -25,9 +25,25 @@ export default function RoomsPage() {
         return;
       }
 
+      // Сначала узнаём, в каких комнатах пользователь состоит
+      const { data: memberships } = await supabase
+        .from("room_members")
+        .select("room_id")
+        .eq("user_id", user.id);
+
+      const roomIds = (memberships || []).map((m) => m.room_id);
+
+      if (roomIds.length === 0) {
+        setRooms([]);
+        setLoading(false);
+        return;
+      }
+
+      // Затем загружаем сами эти комнаты
       const { data } = await supabase
         .from("chat_rooms")
         .select("*")
+        .in("id", roomIds)
         .order("created_at", { ascending: false });
 
       setRooms(data || []);
@@ -55,29 +71,44 @@ export default function RoomsPage() {
 
       <div className="mx-auto max-w-2xl px-6 py-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-paper">Комнаты</h1>
-          <Link
-            href="/chat/new"
-            className="rounded-full bg-sakura px-5 py-2 text-sm font-semibold text-ink transition hover:brightness-110"
-          >
-            + Создать комнату
-          </Link>
+          <h1 className="text-xl font-semibold text-paper">Мои комнаты</h1>
+          <div className="flex gap-2">
+            <Link
+              href="/chat/browse"
+              className="rounded-full border border-paper/20 px-4 py-2 text-sm font-semibold text-paper transition hover:border-sakura"
+            >
+              Найти комнаты
+            </Link>
+            <Link
+              href="/chat/new"
+              className="rounded-full bg-sakura px-4 py-2 text-sm font-semibold text-ink transition hover:brightness-110"
+            >
+              + Создать
+            </Link>
+          </div>
         </div>
 
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Поиск комнаты..."
+          placeholder="Поиск среди своих комнат..."
           className="mt-4 w-full rounded-lg border border-paper/10 bg-panel px-4 py-3 text-paper outline-none focus:border-sakura"
         />
 
         <div className="mt-6 flex flex-col gap-3">
           {filtered.length === 0 && (
-            <p className="text-sm text-muted">
-              Пока нет комнат — станьте первым, кто создаст пространство для
-              общения
-            </p>
+            <div className="rounded-lg bg-panel px-5 py-6 text-center">
+              <p className="text-sm text-muted">
+                Вы пока не состоите ни в одной комнате
+              </p>
+              <Link
+                href="/chat/browse"
+                className="mt-3 inline-block text-sm text-denki hover:underline"
+              >
+                Найти комнаты для вступления →
+              </Link>
+            </div>
           )}
 
           {filtered.map((r) => (
