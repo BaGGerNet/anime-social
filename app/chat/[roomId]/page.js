@@ -168,42 +168,51 @@ export default function RoomPage() {
             </p>
           )}
 
-          {messages.map((m) => (
-            <div
-              key={m.id}
-              className={`flex items-end gap-2 ${
-                m.user_id === userId
-                  ? "flex-row-reverse self-end"
-                  : "self-start"
-              }`}
-            >
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
-                {avatars[m.user_id] ? (
-                  <img
-                    src={avatars[m.user_id]}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  m.username[0]?.toUpperCase()
-                )}
-              </div>
+          {messages.map((m) =>
+            m.is_system ? (
+              <p
+                key={m.id}
+                className="my-1 text-center text-xs text-muted"
+              >
+                {m.content}
+              </p>
+            ) : (
               <div
-                className={`speech-bubble max-w-md px-4 py-2 ${
+                key={m.id}
+                className={`flex items-end gap-2 ${
                   m.user_id === userId
-                    ? "bg-sakura text-ink"
-                    : "bg-panel text-paper"
+                    ? "flex-row-reverse self-end"
+                    : "self-start"
                 }`}
               >
-                {m.user_id !== userId && (
-                  <p className="mb-1 text-xs font-semibold text-denki">
-                    {m.username}
-                  </p>
-                )}
-                <p className="text-sm">{m.content}</p>
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-full bg-panel text-xs font-semibold text-sakura">
+                  {avatars[m.user_id] ? (
+                    <img
+                      src={avatars[m.user_id]}
+                      alt=""
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    m.username[0]?.toUpperCase()
+                  )}
+                </div>
+                <div
+                  className={`speech-bubble max-w-md px-4 py-2 ${
+                    m.user_id === userId
+                      ? "bg-sakura text-ink"
+                      : "bg-panel text-paper"
+                  }`}
+                >
+                  {m.user_id !== userId && (
+                    <p className="mb-1 text-xs font-semibold text-denki">
+                      {m.username}
+                    </p>
+                  )}
+                  <p className="text-sm">{m.content}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
           <div ref={bottomRef} />
         </div>
       </div>
