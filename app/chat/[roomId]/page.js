@@ -165,6 +165,7 @@ export default function RoomPage() {
         roomId={roomId}
         userId={userId}
         username={username}
+        avatarUrl={avatars[userId]}
         isOwner={room.created_by === userId}
       />
 
