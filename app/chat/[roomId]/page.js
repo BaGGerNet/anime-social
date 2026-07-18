@@ -7,6 +7,7 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabaseClient";
 import Header from "../../../components/Header";
+import VoiceChat from "../../../components/VoiceChat";
 
 export default function RoomPage() {
   const router = useRouter();
@@ -159,6 +160,13 @@ export default function RoomPage() {
           )}
         </div>
       </Link>
+
+      <VoiceChat
+        roomId={roomId}
+        userId={userId}
+        username={username}
+        isOwner={room.created_by === userId}
+      />
 
       <div className="flex-1 overflow-y-auto px-6 py-6">
         <div className="mx-auto flex max-w-2xl flex-col gap-3">
