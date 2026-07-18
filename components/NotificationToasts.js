@@ -58,6 +58,7 @@ export default function NotificationToasts() {
         async (payload) => {
           const m = payload.new;
           if (m.user_id === userIdRef.current) return;
+          if (m.is_system) return;
           if (pathnameRef.current === `/chat/${m.room_id}`) return;
 
           pushToast({
