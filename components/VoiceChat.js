@@ -18,6 +18,7 @@ export default function VoiceChat({ roomId, userId, username, isOwner }) {
   const [muted, setMuted] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [error, setError] = useState("");
+  const [needsAudioUnlock, setNeedsAudioUnlock] = useState(false);
 
   const channelRef = useRef(null);
   const localStreamRef = useRef(null);
@@ -54,9 +55,21 @@ export default function VoiceChat({ roomId, userId, username, isOwner }) {
         if (!audioEl) {
           audioEl = new Audio();
           audioEl.autoplay = true;
+          // Добавляем элемент в документ (скрыто) — некоторые браузеры
+          // надёжно воспроизводят звук только если элемент реально в DOM
+          audioEl.style.display = "none";
+          document.body.appendChild(audioEl);
           audioElsRef.current[peerId] = audioEl;
         }
         audioEl.srcObject = event.streams[0];
+
+        const playPromise = audioEl.play();
+        if (playPromise) {
+          playPromise.catch(() => {
+            // Браузер заблокировал автовоспроизведение — покажем кнопку
+            setNeedsAudioUnlock(true);
+          });
+        }
       };
 
       peersRef.current[peerId] = pc;
@@ -85,6 +98,7 @@ export default function VoiceChat({ roomId, userId, username, isOwner }) {
     const audioEl = audioElsRef.current[peerId];
     if (audioEl) {
       audioEl.srcObject = null;
+      audioEl.remove();
       delete audioElsRef.current[peerId];
     }
   }
@@ -182,6 +196,13 @@ export default function VoiceChat({ roomId, userId, username, isOwner }) {
     setConnecting(false);
   }
 
+  function unlockAudio() {
+    Object.values(audioElsRef.current).forEach((audioEl) => {
+      audioEl.play().catch(() => {});
+    });
+    setNeedsAudioUnlock(false);
+  }
+
   function toggleMute() {
     if (!localStreamRef.current) return;
     const newMuted = !muted;
@@ -197,6 +218,15 @@ export default function VoiceChat({ roomId, userId, username, isOwner }) {
   return (
     <div className="border-b border-paper/10 bg-panel/40 px-6 py-3">
       {error && <p className="mb-2 text-xs text-sakura">{error}</p>}
+
+      {needsAudioUnlock && (
+        <button
+          onClick={unlockAudio}
+          className="mb-2 rounded-full bg-denki px-4 py-2 text-xs font-semibold text-paper"
+        >
+          🔊 Включить звук
+        </button>
+      )}
 
       {!joined ? (
         voiceActive ? (
