@@ -7,6 +7,8 @@ import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "../../../lib/supabaseClient";
 import Header from "../../../components/Header";
+import PostComposer from "../../../components/PostComposer";
+import PostsList from "../../../components/PostsList";
 
 export default function ViewProfilePage() {
   const router = useRouter();
@@ -16,6 +18,7 @@ export default function ViewProfilePage() {
   const [loading, setLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   const isOwner = currentUserId === profileId;
 
@@ -39,6 +42,14 @@ export default function ViewProfilePage() {
         .single();
 
       setProfile(data);
+
+      const { data: postsData } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("user_id", profileId)
+        .order("created_at", { ascending: false });
+
+      setPosts(postsData || []);
       setLoading(false);
     }
 
@@ -126,6 +137,29 @@ export default function ViewProfilePage() {
             Написать сообщение
           </Link>
         )}
+
+        <div className="mt-10 border-t border-paper/10 pt-8">
+          <h2 className="text-lg font-semibold text-paper">Посты</h2>
+
+          {isOwner && (
+            <div className="mt-4">
+              <PostComposer
+                userId={currentUserId}
+                username={profile.username || "Аноним"}
+                avatarUrl={profile.avatar_url}
+                onPosted={(newPost) => setPosts((prev) => [newPost, ...prev])}
+              />
+            </div>
+          )}
+
+          <PostsList
+            posts={posts}
+            currentUserId={currentUserId}
+            onDeleted={(id) =>
+              setPosts((prev) => prev.filter((p) => p.id !== id))
+            }
+          />
+        </div>
       </div>
     </main>
   );
