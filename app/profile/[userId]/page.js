@@ -37,7 +37,7 @@ export default function ViewProfilePage() {
 
       const { data } = await supabase
         .from("profiles")
-        .select("username, bio, favorite_genres, avatar_url")
+        .select("username, bio, favorite_genres, avatar_url, cover_url")
         .eq("id", profileId)
         .single();
 
@@ -79,41 +79,49 @@ export default function ViewProfilePage() {
     <main className="min-h-screen bg-ink">
       <Header />
 
-      <div className="mx-auto max-w-xl px-6 py-12">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-panel font-display text-2xl text-sakura">
-              {profile.avatar_url ? (
-                <img
-                  src={profile.avatar_url}
-                  alt="Аватар"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                (profile.username || "?")[0]?.toUpperCase()
-              )}
-            </div>
-            <div>
-              <h1 className="text-xl font-semibold text-paper">
-                {profile.username || "Без имени"}
-              </h1>
-              {isOwner && (
-                <p className="text-sm text-muted">Это ваш профиль</p>
-              )}
-            </div>
-          </div>
-
-          {isOwner && (
-            <Link
-              href="/profile/edit"
-              className="shrink-0 rounded-full border border-paper/20 px-4 py-2 text-sm font-semibold text-paper transition hover:border-sakura"
-            >
-              Редактировать
-            </Link>
+      {/* Обложка + аватар поверх неё по центру */}
+      <div className="relative">
+        <div className="h-40 w-full overflow-hidden bg-panel sm:h-56">
+          {profile.cover_url ? (
+            <img
+              src={profile.cover_url}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="h-full w-full bg-gradient-to-br from-panel to-ink" />
           )}
         </div>
 
-        <div className="mt-8 space-y-6">
+        <div className="absolute left-1/2 top-full flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center overflow-hidden rounded-full border-4 border-ink bg-panel font-display text-3xl text-sakura">
+          {profile.avatar_url ? (
+            <img
+              src={profile.avatar_url}
+              alt="Аватар"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            (profile.username || "?")[0]?.toUpperCase()
+          )}
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-xl px-6 pb-12 pt-16 text-center">
+        <h1 className="text-xl font-semibold text-paper">
+          {profile.username || "Без имени"}
+        </h1>
+        {isOwner && <p className="mt-1 text-sm text-muted">Это ваш профиль</p>}
+
+        {isOwner && (
+          <Link
+            href="/profile/edit"
+            className="mt-4 inline-block rounded-full border border-paper/20 px-5 py-2 text-sm font-semibold text-paper transition hover:border-sakura"
+          >
+            Редактировать
+          </Link>
+        )}
+
+        <div className="mt-8 space-y-6 text-left">
           <div>
             <p className="text-sm text-muted">О себе</p>
             <p className="mt-1 text-paper">
@@ -138,7 +146,7 @@ export default function ViewProfilePage() {
           </Link>
         )}
 
-        <div className="mt-10 border-t border-paper/10 pt-8">
+        <div className="mt-10 border-t border-paper/10 pt-8 text-left">
           <h2 className="text-lg font-semibold text-paper">Посты</h2>
 
           {isOwner && (
