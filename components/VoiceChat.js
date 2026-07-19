@@ -4,12 +4,39 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 // Бесплатные публичные STUN-серверы Google — помогают браузерам найти
-// друг друга напрямую. Без платного TURN-сервера некоторые люди за
-// строгими сетями (корпоративными/учебными) не смогут подключиться —
-// это ограничение бесплатного подхода.
+// друг друга напрямую. Плюс TURN-сервер (Metered.ca) — он нужен, когда
+// прямая связь невозможна (например, из-за жёсткого NAT у мобильных
+// операторов) и помогает голосу дойти, перенаправляя его через себя.
+const TURN_USERNAME = process.env.NEXT_PUBLIC_TURN_USERNAME;
+const TURN_CREDENTIAL = process.env.NEXT_PUBLIC_TURN_CREDENTIAL;
+
 const ICE_SERVERS = [
   { urls: "stun:stun.l.google.com:19302" },
   { urls: "stun:stun1.l.google.com:19302" },
+  ...(TURN_USERNAME && TURN_CREDENTIAL
+    ? [
+        {
+          urls: "turn:global.relay.metered.ca:80",
+          username: TURN_USERNAME,
+          credential: TURN_CREDENTIAL,
+        },
+        {
+          urls: "turn:global.relay.metered.ca:80?transport=tcp",
+          username: TURN_USERNAME,
+          credential: TURN_CREDENTIAL,
+        },
+        {
+          urls: "turn:global.relay.metered.ca:443",
+          username: TURN_USERNAME,
+          credential: TURN_CREDENTIAL,
+        },
+        {
+          urls: "turns:global.relay.metered.ca:443?transport=tcp",
+          username: TURN_USERNAME,
+          credential: TURN_CREDENTIAL,
+        },
+      ]
+    : []),
 ];
 
 // Порог громкости, выше которого считаем, что человек говорит (0-255)
