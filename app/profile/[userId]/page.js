@@ -10,7 +10,6 @@ import Header from "../../../components/Header";
 import PostComposer from "../../../components/PostComposer";
 import PostsList from "../../../components/PostsList";
 import FriendButton from "../../../components/FriendButton";
-import FollowButton from "../../../components/FollowButton";
 
 export default function ViewProfilePage() {
   const router = useRouter();
@@ -178,10 +177,7 @@ export default function ViewProfilePage() {
               </Link>
             </>
           ) : (
-            <>
-              <FriendButton currentUserId={currentUserId} profileId={profileId} />
-              <FollowButton currentUserId={currentUserId} profileId={profileId} />
-            </>
+            <FriendButton currentUserId={currentUserId} profileId={profileId} />
           )}
         </div>
 
